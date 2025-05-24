@@ -1,8 +1,10 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:18' // or any version you want
-        }
+    agent any
+    tools {
+        nodejs 'NodeJS-20.x'  
+    }
+    environment {
+        CI = 'true'
     }
 
     environment {
