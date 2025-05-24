@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'node:18' // or any version you want
+        }
+    }
 
     environment {
         DOCKER_CREDENTIALS_ID = 'meopen123'
