@@ -2,32 +2,27 @@ pipeline {
     agent any
 
     environment {
-        // DockerHub credentials ID stored in Jenkins
-        DOCKER_CREDENTIALS_ID = 'meopen123'  
-        DOCKER_IMAGE_NAME = 'gyeltshen23/dso-p7'  
+        DOCKER_CREDENTIALS_ID = 'meopen123'
+        DOCKER_IMAGE_NAME = 'gyeltshen23/dso-p7'
     }
 
     stages {
         stage('Install Dependencies') {
             steps {
-                script {
-                    nodeUtils.installDependencies()
-                }
+                sh 'npm install'
             }
         }
 
         stage('Run Tests') {
             steps {
-                script {
-                    nodeUtils.runTests()  // This should run 'npm test'
-                }
+                sh 'npm test'
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 script {
-                    dockerUtils.buildDockerImage(env.DOCKER_IMAGE_NAME)
+                    docker.build(env.DOCKER_IMAGE_NAME)
                 }
             }
         }
@@ -35,7 +30,9 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    dockerUtils.pushDockerImage(env.DOCKER_IMAGE_NAME, env.DOCKER_CREDENTIALS_ID)
+                    docker.withRegistry('', env.DOCKER_CREDENTIALS_ID) {
+                        docker.image(env.DOCKER_IMAGE_NAME).push()
+                    }
                 }
             }
         }
