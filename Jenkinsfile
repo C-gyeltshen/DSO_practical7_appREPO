@@ -4,10 +4,6 @@ pipeline {
         nodejs 'NodeJS'  
     }
     environment {
-        CI = 'true'
-    }
-
-    environment {
         DOCKER_CREDENTIALS_ID = 'meopen123'
         DOCKER_IMAGE_NAME = 'gyeltshen23/dso-p7'
     }
